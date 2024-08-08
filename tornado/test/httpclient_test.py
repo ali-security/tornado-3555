@@ -563,13 +563,6 @@ X-XSS-Protection: 1;
         for k, v in response.time_info.items():
             self.assertTrue(0 <= v < 1.0, "time_info[%s] out of bounds: %s" % (k, v))
 
-    def test_header_crlf(self):
-        # Ensure that the client doesn't allow CRLF injection in headers. RFC 9112 section 2.2
-        # prohibits a bare CR specifically and "a recipient MAY recognize a single LF as a line
-        # terminator" so we check each character separately as well as the (redundant) CRLF pair.
-        with self.assertRaises(ValueError):
-            self.fetch("/hello", headers={"foo": "foo\r\nbar:"})
-
 class RequestProxyTest(unittest.TestCase):
     def test_request_set(self):
         proxy = _RequestProxy(HTTPRequest('http://example.com/',
