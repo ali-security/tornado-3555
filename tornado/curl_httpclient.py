@@ -313,8 +313,7 @@ class CurlAsyncHTTPClient(AsyncHTTPClient):
             request.headers["Pragma"] = ""
 
         encoded_headers = [
-            b"%s: %s"
-            % (native_str(k).encode("ASCII"), native_str(v).encode("ISO8859-1"))
+            native_str(k).encode("ASCII") + b": " + native_str(v).encode("ISO8859-1")
             for k, v in request.headers.get_all()
         ]
         for line in encoded_headers:
