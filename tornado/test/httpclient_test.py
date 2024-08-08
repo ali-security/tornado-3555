@@ -569,8 +569,6 @@ X-XSS-Protection: 1;
         # terminator" so we check each character separately as well as the (redundant) CRLF pair.
         with self.assertRaises(ValueError):
             self.fetch("/hello", headers={"foo": "foo\r\nbar:"})
-        with self.assertRaises(ValueError):
-                self.fetch("/hello", headers={"foo": "foo\r\nbar:"})
 
 class RequestProxyTest(unittest.TestCase):
     def test_request_set(self):
