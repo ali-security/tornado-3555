@@ -577,7 +577,8 @@ X-XSS-Protection: 1;
                     self.fetch("/hello", headers={"foo": header})
             with self.subTest(name=name, position="key"):
                 with self.assertRaises(ValueError):
-                    self.fetch("/hello", headers={header: "foo"})
+                    a = self.fetch("/hello", headers={header: "foo"})
+                    print(a)
 
 class RequestProxyTest(unittest.TestCase):
     def test_request_set(self):
