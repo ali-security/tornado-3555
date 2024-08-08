@@ -368,7 +368,7 @@ Transfer-Encoding: chunked
                 self.fetch('/chunk', header_callback=header_callback)
         self.assertEqual(len(exc_info), 1)
         self.assertIs(exc_info[0][0], ZeroDivisionError)
-
+    
     @gen_test
     def test_configure_defaults(self):
         defaults = dict(user_agent='TestDefaultUserAgent', allow_ipv6=False)
@@ -380,6 +380,18 @@ Transfer-Encoding: chunked
             self.assertEqual(response.body, b'TestDefaultUserAgent')
         finally:
             client.close()
+
+    def test_header_crlf(self):
+        # Ensure that the client doesn't allow CRLF injection in headers. RFC 9112 section 2.2
+        # prohibits a bare CR specifically and "a recipient MAY recognize a single LF as a line
+        # terminator" so we check each character separately as well as the (redundant) CRLF pair.
+        for header, name in [
+            ("foo\rbar:", "cr"),
+            ("foo\nbar:", "lf"),
+            ("foo\r\nbar:", "crlf"),
+        ]:
+            with self.assertRaises(ValueError):
+                self.fetch("/hello", headers={"foo": header})
 
     def test_header_types(self):
         # Header values may be passed as character or utf8 byte strings,
