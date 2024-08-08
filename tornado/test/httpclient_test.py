@@ -392,7 +392,7 @@ Transfer-Encoding: chunked
             ("foo\nbar:", "lf"),
         ]:
             with self.assertRaises(ValueError):
-                yield self.fetch("/hello", headers={"foo": header})
+                yield self.http_client.fetch("/hello", headers={"foo": header})
 
     def test_header_types(self):
         # Header values may be passed as character or utf8 byte strings,
