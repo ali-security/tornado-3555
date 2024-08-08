@@ -392,7 +392,7 @@ Transfer-Encoding: chunked
             ("foo\nbar:", "lf"),
         ]:
             try:
-                self.fetch("/hello", headers={"foo": header})
+                yield self.fetch("/hello", headers={"foo": header})
                 # If no exception is raised, assert a failure because an exception was expected
                 self.assertTrue(False, "Expected exception for "+name)
             except ValueError:
