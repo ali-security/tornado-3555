@@ -381,6 +381,7 @@ Transfer-Encoding: chunked
         finally:
             client.close()
 
+    @gen_test
     def test_header_crlf(self):
         # Ensure that the client doesn't allow CRLF injection in headers. RFC 9112 section 2.2
         # prohibits a bare CR specifically and "a recipient MAY recognize a single LF as a line
