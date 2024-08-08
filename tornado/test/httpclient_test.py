@@ -387,20 +387,20 @@ Transfer-Encoding: chunked
         # prohibits a bare CR specifically and "a recipient MAY recognize a single LF as a line
         # terminator" so we check each character separately as well as the (redundant) CRLF pair.
         for header, name in [
+            ("foo\r\nbar:", "crlf"),
             ("foo\rbar:", "cr"),
             ("foo\nbar:", "lf"),
-            ("foo\r\nbar:", "crlf"),
         ]:
             try:
                 self.fetch("/hello", headers={"foo": header})
                 # If no exception is raised, assert a failure because an exception was expected
-                self.fail(f"ValueError was not raised for {name}")
+                self.assertTrue(False, "Expected exception for "+name)
             except ValueError:
                 # If ValueError is raised, the test passes, so we continue
                 continue
             except Exception as e:
                 # If a different type of exception is raised, that's an unexpected failure
-                self.fail(f"Unexpected exception raised for {name}: {e}")
+                self.fail(f"Unexpected exception raised for "+name+": "+str(e))
 
     def test_header_types(self):
         # Header values may be passed as character or utf8 byte strings,
