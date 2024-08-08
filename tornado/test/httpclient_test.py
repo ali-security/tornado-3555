@@ -391,8 +391,16 @@ Transfer-Encoding: chunked
             ("foo\nbar:", "lf"),
             ("foo\r\nbar:", "crlf"),
         ]:
-            with self.assertRaises(ValueError):
+            try:
                 self.fetch("/hello", headers={"foo": header})
+                # If no exception is raised, assert a failure because an exception was expected
+                self.fail(f"ValueError was not raised for {name}")
+            except ValueError:
+                # If ValueError is raised, the test passes, so we continue
+                continue
+            except Exception as e:
+                # If a different type of exception is raised, that's an unexpected failure
+                self.fail(f"Unexpected exception raised for {name}: {e}")
 
     def test_header_types(self):
         # Header values may be passed as character or utf8 byte strings,
